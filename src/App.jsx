@@ -5,12 +5,10 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import MainLayout from './components/MainLayout';
 import Dashboard from './pages/Dashboard';
-
-// Componentes temporales (Placeholders) para las vistas que crearemos en los pasos 3 y 4
-const ExerciseList = () => <div><h2>Lista de Ejercicios</h2></div>;
-const ExerciseForm = () => <div><h2>Formulario de Ejercicio</h2></div>;
-const RoutineList = () => <div><h2>Lista de Rutinas</h2></div>;
-const RoutineForm = () => <div><h2>Formulario de Rutina</h2></div>;
+import ExerciseList from './pages/exercises/ExerciseList';
+import ExerciseForm from './pages/exercises/ExerciseForm';
+import RoutineList from './pages/routines/RoutineList';
+import RoutineForm from './pages/routines/RoutineForm';
 
 function App() {
   return (

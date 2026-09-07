@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-// import api from '../services/api'; // Lo descomentaremos cuando el endpoint exista
+import api from '../services/api';
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  // const [stats, setStats] = useState({ exercises: 0, routines: 0, athletes: 0 });
-  // const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ total_ejercicios: 0, total_rutinas: 0 });
+  const [loading, setLoading] = useState(true);
 
-  /* 
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -23,7 +22,6 @@ const Dashboard = () => {
     };
     fetchStats();
   }, []);
-  */
 
   const handleLogout = () => {
     logout();
@@ -49,7 +47,9 @@ const Dashboard = () => {
           <article className="card shadow-sm h-100" style={{ borderLeft: '4px solid var(--primary-color)' }}>
             <div className="card-body p-4">
               <h5 className="card-title text-muted fs-6 text-uppercase fw-bold tracking-wide">Total Ejercicios</h5>
-              <p className="display-4 fw-bold text-primary mb-0 mt-2">15</p>
+              <p className="display-4 fw-bold text-primary mb-0 mt-2">
+                {loading ? <span className="spinner-border spinner-border-sm"></span> : stats.total_ejercicios || 0}
+              </p>
             </div>
           </article>
         </div>
@@ -57,15 +57,19 @@ const Dashboard = () => {
           <article className="card shadow-sm h-100" style={{ borderLeft: '4px solid #10b981' }}>
             <div className="card-body p-4">
               <h5 className="card-title text-muted fs-6 text-uppercase fw-bold tracking-wide">Total Rutinas</h5>
-              <p className="display-4 fw-bold mb-0 mt-2" style={{ color: '#10b981' }}>8</p>
+              <p className="display-4 fw-bold mb-0 mt-2" style={{ color: '#10b981' }}>
+                {loading ? <span className="spinner-border spinner-border-sm"></span> : stats.total_rutinas || 0}
+              </p>
             </div>
           </article>
         </div>
         <div className="col-12 col-md-4">
           <article className="card shadow-sm h-100" style={{ borderLeft: '4px solid #0ea5e9' }}>
             <div className="card-body p-4">
-              <h5 className="card-title text-muted fs-6 text-uppercase fw-bold tracking-wide">Atletas Activos</h5>
-              <p className="display-4 fw-bold mb-0 mt-2" style={{ color: '#0ea5e9' }}>42</p>
+              <h5 className="card-title text-muted fs-6 text-uppercase fw-bold tracking-wide">Rol Actual</h5>
+              <p className="display-6 fw-bold mb-0 mt-3 text-info text-capitalize">
+                {user?.role || 'Atleta'}
+              </p>
             </div>
           </article>
         </div>
