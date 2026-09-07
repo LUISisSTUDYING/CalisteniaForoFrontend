@@ -9,11 +9,15 @@ const RoutineList = () => {
   const [routines, setRoutines] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchRoutines = async (page = 1) => {
+  const fetchRoutines = async (page = 1, search = searchTerm) => {
     try {
       setLoading(true);
-      const response = await api.get(`/rutinas?page=${page}`);
+      const url = search 
+        ? `/rutinas?page=${page}&search=${encodeURIComponent(search)}`
+        : `/rutinas?page=${page}`;
+      const response = await api.get(url);
       setRoutines(response.data.data || response.data);
       if (response.data.current_page) {
         setPagination({
@@ -44,15 +48,35 @@ const RoutineList = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchRoutines(1, searchTerm);
+  };
+
   return (
     <section className="fade-in">
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <h2 className="h3 fw-bold m-0">Rutinas de Entrenamiento</h2>
-        {isAdmin && (
-          <Link to="/rutinas/nuevo" className="btn btn-success shadow-sm text-white">
-            + Nueva
-          </Link>
-        )}
+        <div className="d-flex gap-3">
+          <form onSubmit={handleSearch} className="d-flex">
+            <input 
+              type="text" 
+              className="form-control form-control-sm bg-dark text-light border-secondary shadow-sm" 
+              placeholder="Buscar rutina..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ minWidth: '200px' }}
+            />
+            <button type="submit" className="btn btn-sm btn-outline-success ms-2 shadow-sm">
+              Buscar
+            </button>
+          </form>
+          {isAdmin && (
+            <Link to="/rutinas/nuevo" className="btn btn-sm btn-success shadow-sm text-white text-nowrap d-flex align-items-center">
+              + Nueva
+            </Link>
+          )}
+        </div>
       </div>
 
       {loading ? (
