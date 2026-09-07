@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import api from '../services/api';
 
 export const AuthContext = createContext();
@@ -7,6 +7,21 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [user, setUser] = useState(null); 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (token && !user) {
+        try {
+          const response = await api.get('/user');
+          setUser(response.data);
+        } catch (error) {
+          console.error("Sesión inválida o expirada");
+          logout();
+        }
+      }
+    };
+    fetchUser();
+  }, [token]);
 
   const login = async (credentials) => {
     try {
