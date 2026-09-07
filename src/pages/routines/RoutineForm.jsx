@@ -23,12 +23,13 @@ const RoutineForm = () => {
     const fetchData = async () => {
       try {
         // Cargar lista de ejercicios para el select
-        const exercisesRes = await api.get('/ejercicios');
-        setExercises(exercisesRes.data);
+        const exercisesRes = await api.get('/ejercicios?per_page=100'); // Solicitar un límite alto para llenar el select
+        const exercisesData = exercisesRes.data.data || exercisesRes.data;
+        setExercises(exercisesData);
         
         // Asignar primer ejercicio por defecto si estamos creando
-        if (!isEditing && exercisesRes.data.length > 0) {
-          setFormData(prev => ({ ...prev, ejercicio_id: exercisesRes.data[0].id }));
+        if (!isEditing && exercisesData.length > 0) {
+          setFormData(prev => ({ ...prev, ejercicio_id: exercisesData[0].id }));
         }
 
         // Cargar datos de la rutina si es edición

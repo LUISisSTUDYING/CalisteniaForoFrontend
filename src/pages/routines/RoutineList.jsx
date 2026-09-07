@@ -7,12 +7,20 @@ const RoutineList = () => {
   const { user } = useContext(AuthContext);
   const isAdmin = user?.role === 'admin';
   const [routines, setRoutines] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchRoutines = async () => {
+  const fetchRoutines = async (page = 1) => {
     try {
-      const response = await api.get('/rutinas');
-      setRoutines(response.data);
+      setLoading(true);
+      const response = await api.get(`/rutinas?page=${page}`);
+      setRoutines(response.data.data || response.data);
+      if (response.data.current_page) {
+        setPagination({
+          current_page: response.data.current_page,
+          last_page: response.data.last_page,
+        });
+      }
     } catch (error) {
       console.error("Error cargando rutinas", error);
     } finally {
@@ -84,6 +92,36 @@ const RoutineList = () => {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {pagination && pagination.last_page > 1 && (
+        <div className="d-flex justify-content-center mt-4">
+          <nav aria-label="Navegación de páginas">
+            <ul className="pagination mb-0">
+              <li className={`page-item ${pagination.current_page === 1 ? 'disabled' : ''}`}>
+                <button 
+                  className="page-link bg-dark text-success border-secondary" 
+                  onClick={() => fetchRoutines(pagination.current_page - 1)}
+                >
+                  Anterior
+                </button>
+              </li>
+              <li className="page-item disabled">
+                <span className="page-link bg-dark text-light border-secondary">
+                  Página {pagination.current_page} de {pagination.last_page}
+                </span>
+              </li>
+              <li className={`page-item ${pagination.current_page === pagination.last_page ? 'disabled' : ''}`}>
+                <button 
+                  className="page-link bg-dark text-success border-secondary" 
+                  onClick={() => fetchRoutines(pagination.current_page + 1)}
+                >
+                  Siguiente
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       )}
     </section>
