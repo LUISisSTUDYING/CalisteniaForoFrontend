@@ -17,7 +17,7 @@ const MainLayout = () => {
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark py-3 border-bottom border-secondary">
           <div className="container">
             <NavLink className="navbar-brand fw-bold text-primary" to="/dashboard">
-              <span className="text-white">Calisthenics</span> Forum
+              <span className="text-white">Calistenia</span> Tarija
             </NavLink>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
               <span className="navbar-toggler-icon"></span>
@@ -25,13 +25,13 @@ const MainLayout = () => {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li className="nav-item">
-                  <NavLink className={({isActive}) => `nav-link ${isActive ? 'active text-primary fw-bold' : 'text-light'}`} to="/dashboard">Dashboard</NavLink>
+                  <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active text-primary fw-bold' : 'text-light'}`} to="/dashboard">Dashboard</NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className={({isActive}) => `nav-link ${isActive ? 'active text-primary fw-bold' : 'text-light'}`} to="/ejercicios">Ejercicios</NavLink>
+                  <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active text-primary fw-bold' : 'text-light'}`} to="/ejercicios">Ejercicios</NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className={({isActive}) => `nav-link ${isActive ? 'active text-primary fw-bold' : 'text-light'}`} to="/rutinas">Rutinas</NavLink>
+                  <NavLink className={({ isActive }) => `nav-link ${isActive ? 'active text-primary fw-bold' : 'text-light'}`} to="/rutinas">Rutinas</NavLink>
                 </li>
               </ul>
               <div className="d-flex align-items-center mt-3 mt-lg-0">
@@ -53,7 +53,7 @@ const MainLayout = () => {
 
       <footer className="bg-dark text-center py-4 mt-auto border-top border-secondary">
         <div className="container">
-          <small className="text-muted">&copy; {new Date().getFullYear()} Calisthenics Forum. SPA desarrollada en React.</small>
+          <small className="text-muted">&copy; {new Date().getFullYear()} Calistenia Tarija. SPA desarrollada en React.</small>
         </div>
       </footer>
     </div>
