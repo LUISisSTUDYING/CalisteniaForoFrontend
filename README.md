@@ -4,7 +4,7 @@ Este es el repositorio Frontend para la plataforma de gestión de Calistenia Tar
 
 ## Guía de Instalación Rápida
 
-Sigue estos sencillos pasos para levantar el entorno de desarrollo local. Es directo y claro:
+Sigue estos sencillos pasos para levantar el entorno de desarrollo local. Es directo y claro :
 
 ### 1. Requisitos Previos
 - Asegúrate de tener instalado **Node.js** (versión 18 o superior).
