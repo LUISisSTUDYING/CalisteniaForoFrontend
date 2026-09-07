@@ -6,11 +6,11 @@ const ProtectedRoute = () => {
   const { token } = useContext(AuthContext);
 
   if (!token) {
-    // Si no hay token, redirigir inmediatamente a login
+
     return <Navigate to="/login" replace />;
   }
 
-  // Si hay token, renderizar los componentes hijos (rutas protegidas)
+
   return <Outlet />;
 };
 

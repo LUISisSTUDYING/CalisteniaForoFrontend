@@ -7,12 +7,24 @@ const ExerciseList = () => {
   const { user } = useContext(AuthContext);
   const isAdmin = user?.role === 'admin';
   const [exercises, setExercises] = useState([]);
+  const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchExercises = async () => {
+  const fetchExercises = async (page = 1, search = searchTerm) => {
     try {
-      const response = await api.get('/ejercicios');
-      setExercises(response.data);
+      setLoading(true);
+      const url = search 
+        ? `/ejercicios?page=${page}&search=${encodeURIComponent(search)}`
+        : `/ejercicios?page=${page}`;
+      const response = await api.get(url);
+      setExercises(response.data.data || response.data);
+      if (response.data.current_page) {
+        setPagination({
+          current_page: response.data.current_page,
+          last_page: response.data.last_page,
+        });
+      }
     } catch (error) {
       console.error("Error cargando ejercicios", error);
     } finally {
@@ -36,15 +48,35 @@ const ExerciseList = () => {
     }
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchExercises(1, searchTerm); // Al buscar, siempre reiniciamos a la página 1
+  };
+
   return (
     <section className="fade-in">
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <h2 className="h3 fw-bold m-0">Catálogo de Ejercicios</h2>
-        {isAdmin && (
-          <Link to="/ejercicios/nuevo" className="btn btn-primary shadow-sm">
-            + Nuevo
-          </Link>
-        )}
+        <div className="d-flex gap-3">
+          <form onSubmit={handleSearch} className="d-flex">
+            <input 
+              type="text" 
+              className="form-control form-control-sm bg-dark text-light border-secondary shadow-sm" 
+              placeholder="Buscar ejercicio..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ minWidth: '200px' }}
+            />
+            <button type="submit" className="btn btn-sm btn-outline-primary ms-2 shadow-sm">
+              Buscar
+            </button>
+          </form>
+          {isAdmin && (
+            <Link to="/ejercicios/nuevo" className="btn btn-sm btn-primary shadow-sm text-nowrap d-flex align-items-center">
+              + Nuevo
+            </Link>
+          )}
+        </div>
       </div>
 
       {loading ? (
@@ -77,6 +109,36 @@ const ExerciseList = () => {
               </article>
             </div>
           ))}
+        </div>
+      )}
+
+      {pagination && pagination.last_page > 1 && (
+        <div className="d-flex justify-content-center mt-5">
+          <nav aria-label="Navegación de páginas">
+            <ul className="pagination mb-0">
+              <li className={`page-item ${pagination.current_page === 1 ? 'disabled' : ''}`}>
+                <button 
+                  className="page-link bg-dark text-primary border-secondary" 
+                  onClick={() => fetchExercises(pagination.current_page - 1)}
+                >
+                  Anterior
+                </button>
+              </li>
+              <li className="page-item disabled">
+                <span className="page-link bg-dark text-light border-secondary">
+                  Página {pagination.current_page} de {pagination.last_page}
+                </span>
+              </li>
+              <li className={`page-item ${pagination.current_page === pagination.last_page ? 'disabled' : ''}`}>
+                <button 
+                  className="page-link bg-dark text-primary border-secondary" 
+                  onClick={() => fetchExercises(pagination.current_page + 1)}
+                >
+                  Siguiente
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       )}
     </section>
